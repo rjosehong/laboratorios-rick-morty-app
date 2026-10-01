@@ -24,10 +24,12 @@ import coil.compose.AsyncImage
 import plat.lab3.laboratorio7.R
 import plat.lab3.laboratorio7.data.CharacterDb
 import plat.lab3.laboratorio7.ui.theme.Laboratorio7Theme
+import plat.lab3.laboratorio7.navigation.BottomBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppCharacters(modifier: Modifier = Modifier, onCharacterClick: (Int) -> Unit = {}) {
+fun AppCharacters(modifier: Modifier = Modifier,
+                  onCharacterClick: (Int) -> Unit = {}) {
     val characters = remember { CharacterDb().getAllCharacters() }
 
     Scaffold(
@@ -40,34 +42,7 @@ fun AppCharacters(modifier: Modifier = Modifier, onCharacterClick: (Int) -> Unit
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        },
-        bottomBar = {
-            BottomAppBar(modifier = Modifier) {
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly){
-                    Column(modifier = Modifier,
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally){
-                        Icon(painter = painterResource(id = plat.lab3.laboratorio7.R.drawable.characters_icon), contentDescription = null, Modifier.size(24.dp))
-                        Text("Characters")
-                    }
-
-                    Column(modifier = Modifier,
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally){
-                        Icon(painter = painterResource(id = R.drawable.locations_icon), contentDescription = null, Modifier.size(24.dp))
-                        Text("Locations")
-                    }
-
-                    Column(modifier = Modifier,
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally){
-                        Icon(Icons.Default.Person, contentDescription = null, Modifier.size(24.dp))
-                        Text("Profile")
-                    }
-                }
-            }
-        },
+        }
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(characters) { character ->
@@ -98,5 +73,7 @@ fun AppCharacters(modifier: Modifier = Modifier, onCharacterClick: (Int) -> Unit
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CharactersPreview() {
-    Laboratorio7Theme { AppCharacters() }
+    Laboratorio7Theme {
+        //AppCharacters()
+    }
 }

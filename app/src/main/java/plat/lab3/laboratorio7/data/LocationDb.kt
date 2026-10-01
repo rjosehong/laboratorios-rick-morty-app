@@ -1,4 +1,4 @@
-// import .....Location
+package plat.lab3.laboratorio7.data// import .....Location
 
 class LocationDb {
     private val locations: List<Location> = listOf(

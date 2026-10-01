@@ -1,3 +1,5 @@
+package plat.lab3.laboratorio7.data
+
 data class Location(
     val id: Int,
     val name: String,

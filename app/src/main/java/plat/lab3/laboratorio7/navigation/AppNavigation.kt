@@ -76,7 +76,7 @@ fun AppNavigation() {
                 Profile(
                     onLogoutClick = {
                         navController.navigate(Login) {
-                            popUpTo(navController.graph.id) { inclusive = false }
+                            popUpTo(navController.graph.id) { inclusive = true }
                         }
                     }
                 )
