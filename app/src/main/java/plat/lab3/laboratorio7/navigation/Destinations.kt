@@ -10,3 +10,18 @@ object CharacterList
 
 @Serializable
 data class CharacterDetail(val id: Int)
+
+@Serializable
+object CharacterGraph
+
+@Serializable
+object LocationList
+
+@Serializable
+data class LocationDetail(val id:Int)
+
+@Serializable
+object LocationGraph
+
+@Serializable
+object Profiles

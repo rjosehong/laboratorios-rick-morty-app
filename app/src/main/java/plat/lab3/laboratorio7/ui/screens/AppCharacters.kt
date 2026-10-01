@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -13,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import plat.lab3.laboratorio7.R
 import plat.lab3.laboratorio7.data.CharacterDb
 import plat.lab3.laboratorio7.ui.theme.Laboratorio7Theme
 
@@ -36,7 +40,34 @@ fun AppCharacters(modifier: Modifier = Modifier, onCharacterClick: (Int) -> Unit
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        }
+        },
+        bottomBar = {
+            BottomAppBar(modifier = Modifier) {
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly){
+                    Column(modifier = Modifier,
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally){
+                        Icon(painter = painterResource(id = plat.lab3.laboratorio7.R.drawable.characters_icon), contentDescription = null, Modifier.size(24.dp))
+                        Text("Characters")
+                    }
+
+                    Column(modifier = Modifier,
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally){
+                        Icon(painter = painterResource(id = R.drawable.locations_icon), contentDescription = null, Modifier.size(24.dp))
+                        Text("Locations")
+                    }
+
+                    Column(modifier = Modifier,
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally){
+                        Icon(Icons.Default.Person, contentDescription = null, Modifier.size(24.dp))
+                        Text("Profile")
+                    }
+                }
+            }
+        },
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(characters) { character ->
