@@ -6,19 +6,29 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import plat.lab3.laboratorio7.data.CharacterDb
+import plat.lab3.laboratorio7.ui.components.ErrorLayout
+import plat.lab3.laboratorio7.ui.components.LoadingLayout
 import plat.lab3.laboratorio7.ui.theme.Laboratorio7Theme
+import plat.lab3.laboratorio7.ui.viewmodels.CharactersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppCharacterDetail(characterId: Int, modifier: Modifier = Modifier, onBackClick: () -> Unit = {}) {
+fun AppCharacterDetail(characterId: Int,
+                       modifier: Modifier = Modifier,
+                       onBackClick: () -> Unit = {},
+                       viewModel: CharactersViewModel = viewModel()) {
     val character = CharacterDb().getCharacterById(characterId)
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier,
@@ -38,22 +48,28 @@ fun AppCharacterDetail(characterId: Int, modifier: Modifier = Modifier, onBackCl
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            AsyncImage(
-                model = character.image,
-                contentDescription = character.name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(200.dp).clip(CircleShape)
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(character.name, style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.height(24.dp))
-            DetailRow("Species:", character.species)
-            DetailRow("Status:", character.status)
-            DetailRow("Gender:", character.gender)
+        Box(modifier = Modifier.padding(innerPadding).fillMaxSize()){
+            when {
+                state.hasError -> ErrorLayout(onRetryClick = viewModel::loadCharactersDetail)
+                state.isLoading -> LoadingLayout(onClick = viewModel::onLoadingClick)
+                else -> Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = character.image,
+                        contentDescription = character.name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(200.dp).clip(CircleShape)
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Text(character.name, style = MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(24.dp))
+                    DetailRow("Species:", character.species)
+                    DetailRow("Status:", character.status)
+                    DetailRow("Gender:", character.gender)
+                }
+            }
         }
     }
 }

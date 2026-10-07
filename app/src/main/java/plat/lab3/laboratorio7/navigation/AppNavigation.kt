@@ -21,7 +21,7 @@ fun AppNavigation() {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
     val showBottomBar = destination?.hasRoute<Login>() != true && destination?.hasRoute<CharacterDetail>() != true
-            && destination?.hasRoute<LocationDetail>() != true && destination?.hasRoute<Profiles>() != true
+            && destination?.hasRoute<LocationDetail>() != true
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
