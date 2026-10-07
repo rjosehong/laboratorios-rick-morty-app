@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,7 +58,9 @@ fun Locations(modifier:Modifier= Modifier,
               onLocationClick: (Int) -> Unit = {},
               viewModel: CharactersViewModel = viewModel()){
     val locations = remember { LocationDb().getAllLocations() }
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.locations.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) { viewModel.loadLocations() }
 
     Scaffold(
         topBar = {
@@ -73,7 +76,7 @@ fun Locations(modifier:Modifier= Modifier,
         Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
             when {
                 state.hasError -> ErrorLayout(onRetryClick = viewModel::loadLocations)
-                state.isLoading -> LoadingLayout(onClick = viewModel::onLoadingClick)
+                state.isLoading -> LoadingLayout(onClick = viewModel::onLocationsLoadingClick)
                 else -> LazyColumn(modifier = Modifier) {
                     items(locations) { location ->
                         Row(modifier = Modifier

@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
@@ -28,7 +29,9 @@ fun AppCharacterDetail(characterId: Int,
                        onBackClick: () -> Unit = {},
                        viewModel: CharactersViewModel = viewModel()) {
     val character = CharacterDb().getCharacterById(characterId)
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.characterDetail.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) { viewModel.loadCharacterDetail() }
 
     Scaffold(
         modifier = modifier,
@@ -50,8 +53,8 @@ fun AppCharacterDetail(characterId: Int,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding).fillMaxSize()){
             when {
-                state.hasError -> ErrorLayout(onRetryClick = viewModel::loadCharactersDetail)
-                state.isLoading -> LoadingLayout(onClick = viewModel::onLoadingClick)
+                state.hasError -> ErrorLayout(onRetryClick = { viewModel.loadCharacterDetail(force = true) })
+                state.isLoading -> LoadingLayout(onClick = viewModel::onCharacterDetailLoadingClick)
                 else -> Column(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,7 +39,9 @@ fun AppCharacters(modifier: Modifier = Modifier,
                   onCharacterClick: (Int) -> Unit = {},
                   viewModel: CharactersViewModel = viewModel()) {
     val characters = remember { CharacterDb().getAllCharacters() }
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.characters.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) { viewModel.loadCharacters() }
 
     Scaffold(
         modifier = modifier,
@@ -54,8 +57,8 @@ fun AppCharacters(modifier: Modifier = Modifier,
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding).fillMaxSize()){
             when {
-                state.hasError -> ErrorLayout(onRetryClick = viewModel::loadCharacters)
-                state.isLoading -> LoadingLayout(onClick = viewModel::onLoadingClick)
+                state.hasError -> ErrorLayout(onRetryClick = { viewModel.loadCharacters(force = true) })
+                state.isLoading -> LoadingLayout(onClick = viewModel::onCharactersLoadingClick)
                 else -> LazyColumn(modifier = Modifier) {
                     items(characters) { character ->
                         Row(
