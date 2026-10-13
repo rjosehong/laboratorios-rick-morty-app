@@ -35,7 +35,8 @@ import plat.lab3.laboratorio7.ui.theme.Laboratorio7Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile(modifier: Modifier = Modifier, onLogoutClick: () -> Unit){
+fun Profile(modifier: Modifier = Modifier, onLogoutClick: () -> Unit,
+            name:String =""){
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -64,7 +65,7 @@ fun Profile(modifier: Modifier = Modifier, onLogoutClick: () -> Unit){
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween){
                 Text("Nombre:")
-                Text("Rodrigo José Navas Hong")
+                Text(name)
             }
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween){

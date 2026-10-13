@@ -47,13 +47,16 @@ fun BottomBar(navController: NavController) {
 
     NavigationBar {
         items.forEach { item ->
+            val selected = currentDestination?.hierarchy?.any {it.hasRoute(item.routeClass)} == true
             NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any { it.hasRoute(item.routeClass) } == true,
+                selected = selected,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo<CharacterGraph> { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
+                    if (!selected) {
+                        navController.navigate(item.route) {
+                            popUpTo<CharacterGraph> { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 icon = item.icon,
