@@ -78,7 +78,7 @@ fun Locations(modifier:Modifier= Modifier,
                 state.hasError -> ErrorLayout(onRetryClick = viewModel::loadLocations)
                 state.isLoading -> LoadingLayout(onClick = viewModel::onLocationsLoadingClick)
                 else -> LazyColumn(modifier = Modifier) {
-                    items(locations) { location ->
+                    items(state.data) { location ->
                         Row(modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 12.dp)

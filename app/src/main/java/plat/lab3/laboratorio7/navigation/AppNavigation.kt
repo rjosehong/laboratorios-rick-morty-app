@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import plat.lab3.laboratorio7.data.UserPreferences
 import plat.lab3.laboratorio7.ui.screens.*
+import plat.lab3.laboratorio7.data.local.AppDatabase
+import plat.lab3.laboratorio7.data.local.syncIfNeeded
 
 @Composable
 fun AppNavigation() {
@@ -40,10 +42,13 @@ fun AppNavigation() {
             && destination?.hasRoute<LocationDetail>() != true
 
     val context = LocalContext.current
-    val isLocationsOrProfile = destination?.hasRoute<LocationList>() == true ||
+    val isMainScreen = destination?.hasRoute<CharacterList>() == true ||
+            destination?.hasRoute<LocationList>() == true ||
             destination?.hasRoute<Profiles>() == true
 
-    BackHandler(enabled = isLocationsOrProfile) {
+    var syncing by remember { mutableStateOf(false)}
+
+    BackHandler(enabled = isMainScreen) {
         (context as? Activity)?.finish()
     }
 
@@ -78,8 +83,11 @@ fun AppNavigation() {
                     }
                 } else {
                     AppLogin(
+                        isLoading = syncing,
                         onEnterClick = { name ->
                             scope.launch {
+                                syncing = true
+                                AppDatabase.getInstance(context).syncIfNeeded()
                                 UserPreferences(context.applicationContext).saveName(name)
                                 navController.navigate(CharacterGraph) {
                                     popUpTo<Login> { inclusive = true }

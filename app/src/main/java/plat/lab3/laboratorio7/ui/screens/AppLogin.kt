@@ -14,7 +14,7 @@ import plat.lab3.laboratorio7.R
 import plat.lab3.laboratorio7.ui.theme.Laboratorio7Theme
 
 @Composable
-fun AppLogin(modifier: Modifier = Modifier, onEnterClick: (String) -> Unit = {}) {
+fun AppLogin(modifier: Modifier = Modifier, isLoading: Boolean = false, onEnterClick: (String) -> Unit = {}) {
     val nameState = rememberTextFieldState()
     Box(
         modifier = modifier
@@ -38,14 +38,25 @@ fun AppLogin(modifier: Modifier = Modifier, onEnterClick: (String) -> Unit = {})
 
             OutlinedTextField(
                 state = nameState,
-                placeholder = { Text("Nombre")}
+                enabled = !isLoading,
+                placeholder = { Text("Nombre") }
             )
 
             Spacer(Modifier.height(24.dp))
-            Button(modifier = Modifier.width(280.dp),
-                enabled = nameState.text.isNotBlank(),
-                onClick = { onEnterClick(nameState.text.toString().trim()) }) {
-                Text("Iniciar Sesión")
+            Button(
+                modifier = Modifier.width(280.dp),
+                enabled = !isLoading && nameState.text.isNotBlank(),
+                onClick = { onEnterClick(nameState.text.toString().trim()) }
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("Iniciar Sesión")
+                }
             }
         }
         Text(
