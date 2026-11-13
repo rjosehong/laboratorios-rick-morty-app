@@ -7,8 +7,10 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [CharacterEntity::class, LocationEntity::class],
-    version = 1)
-abstract class AppDatabase: RoomDatabase() {
+    version = 2,
+    exportSchema = false
+)
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun characterDao(): CharacterDao
     abstract fun locationDao(): LocationDao
@@ -23,7 +25,10 @@ abstract class AppDatabase: RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "rickmorty.db"
-                ).build().also { INSTANCE = it }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }

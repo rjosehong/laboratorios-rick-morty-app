@@ -4,17 +4,27 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(character: List<CharacterEntity>)
+    suspend fun insertAll(characters: List<CharacterEntity>)
 
-    @Query("SELECT * FROM characters")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(character: CharacterEntity): Long
+
+    @Update
+    suspend fun update(character: CharacterEntity)
+
+    @Query("DELETE FROM characters WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
+    @Query("SELECT * FROM characters ORDER BY id")
     fun getAll(): Flow<List<CharacterEntity>>
 
-    @Query("SELECT * FROM characters WHERE isFavorite = 1")
+    @Query("SELECT * FROM characters WHERE isFavorite = 1 ORDER BY id")
     fun getFavorites(): Flow<List<CharacterEntity>>
 
     @Query("SELECT * FROM characters WHERE id = :id")
@@ -28,5 +38,4 @@ interface CharacterDao {
 
     @Query("DELETE FROM characters")
     suspend fun deleteAll()
-
 }

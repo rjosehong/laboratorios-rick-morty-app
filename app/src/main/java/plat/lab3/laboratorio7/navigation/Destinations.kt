@@ -25,3 +25,6 @@ object LocationGraph
 
 @Serializable
 object Profiles
+
+@Serializable
+data class CharacterForm(val id: Int = 0)

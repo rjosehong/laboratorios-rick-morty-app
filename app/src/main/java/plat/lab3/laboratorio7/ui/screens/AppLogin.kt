@@ -8,13 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import plat.lab3.laboratorio7.R
-import plat.lab3.laboratorio7.ui.theme.Laboratorio7Theme
 
 @Composable
-fun AppLogin(modifier: Modifier = Modifier, isLoading: Boolean = false, onEnterClick: (String) -> Unit = {}) {
+fun AppLogin(modifier: Modifier = Modifier, isLoading: Boolean = false, hasError: Boolean = false, onEnterClick: (String) -> Unit = {}) {
     val nameState = rememberTextFieldState()
     Box(
         modifier = modifier
@@ -54,6 +52,13 @@ fun AppLogin(modifier: Modifier = Modifier, isLoading: Boolean = false, onEnterC
                         strokeWidth = 2.dp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
+                }
+                else if (hasError) {
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "No se pudo conectar. Revisa tu internet e intenta de nuevo.",
+                        color = MaterialTheme.colorScheme.error
+                    )
                 } else {
                     Text("Iniciar Sesión")
                 }
@@ -64,10 +69,4 @@ fun AppLogin(modifier: Modifier = Modifier, isLoading: Boolean = false, onEnterC
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginPreview() {
-    Laboratorio7Theme { AppLogin() }
 }
